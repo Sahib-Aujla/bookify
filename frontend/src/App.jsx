@@ -1,13 +1,15 @@
+import ButtonGradient from "./assets/svg/ButtonGradient";
+import Header from "./components/Header";
 
-
-const App=()=> {
+const App = () => {
   return (
-    <> 
-      <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <>
+      <div className="pt-[4.75rem] lg:pt-[5.35rem] overflow-hidden">
+        <Header></Header>
+      </div>
+      <ButtonGradient></ButtonGradient>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
