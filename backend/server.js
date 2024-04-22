@@ -1,9 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
-const books=require("./mock_data")
-const Book=require("./model")
-require('dotenv').config();
+const books = require("./mock_data");
+const {Book,Message} = require("./model");
+require("dotenv").config();
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -13,8 +18,8 @@ cloudinary.config({
 
 const uploadPdfToCloudinary = async (file) => {
   try {
-    const result =await cloudinary.uploader.upload(file);
-    console.log("PDF "+result.secure_url );
+    const result = await cloudinary.uploader.upload(file);
+    console.log("PDF " + result.secure_url);
     return result.secure_url; // Return the URL of the uploaded PDF file
   } catch (error) {
     console.error("Error uploading PDF to Cloudinary:", error);
@@ -24,28 +29,23 @@ const uploadPdfToCloudinary = async (file) => {
 
 const uploadImageToCloudinary = async (file) => {
   try {
-    const result =await cloudinary.uploader.upload(file);
-    console.log("Image "+result.secure_url );
-    return result.secure_url; 
+    const result = await cloudinary.uploader.upload(file);
+    console.log("Image " + result.secure_url);
+    return result.secure_url;
   } catch (error) {
     console.error("Error uploading image to Cloudinary:", error);
     throw error;
   }
 };
 
-
-const app = express();
-
 const connect = () => {
   mongoose
-    .connect(
-      process.env.MONGO_URL
-    )
+    .connect(process.env.MONGO_URL)
     .then(() => {
       console.log("Connected to MongoDB");
 
       // books.forEach(async book=>{
-        
+
       //   try {
       //    const file=book.pdf;
       //    const pdfUrl=await uploadPdfToCloudinary(file);
@@ -68,8 +68,7 @@ const connect = () => {
       //   } catch (error) {
       //     console.error("Error", error);
       //   }
-       
-        
+
       // })
     })
     .catch((error) => {
@@ -81,18 +80,32 @@ app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 
-app.get("/allbooks", async(req, res) => {
+app.get("/allbooks", async (req, res) => {
   try {
     // Fetch all books from the database
     const books = await Book.find({});
 
     // Send the books as a response
     res.status(200).json(books);
-} catch (error) {
-    console.error('Error fetching books from database:', error);
-    res.status(500).json({ error: 'Internal server error' });
-}
-})
+  } catch (error) {
+    console.error("Error fetching books from database:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/message", async (req, res) => {
+  try {
+    const { firstName, lastName, email, message } = req.body;
+
+    const newMessage = new Message({ firstName, lastName, email, message });
+    await newMessage.save();
+
+    res.status(201).json({ message: "Message sent successfully" });
+  } catch (error) {
+    console.error("Error sending message:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 

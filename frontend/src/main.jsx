@@ -6,15 +6,23 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-
+import { Provider } from "react-redux";
+import {store} from './store/store'
+import Explore from "./Explore.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
   },
+  {
+    path: "/explore",
+    element: <Explore />
+  }
 ],);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+  <Provider store={store}> 
     <RouterProvider router={router} />
+    </Provider> 
   </React.StrictMode>
 );
