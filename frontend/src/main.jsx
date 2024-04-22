@@ -9,6 +9,7 @@ import {
 import { Provider } from "react-redux";
 import {store} from './store/store'
 import Explore from "./Explore.jsx";
+import Book from "./Book.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/explore",
     element: <Explore />
+  },
+  {
+    path:"/book/:id",
+    element:<Book />
   }
 ],);
 ReactDOM.createRoot(document.getElementById("root")).render(

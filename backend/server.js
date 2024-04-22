@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
 const books = require("./mock_data");
-const {Book,Message} = require("./model");
+const { Book, Message } = require("./model");
 require("dotenv").config();
 const cors = require("cors");
 
@@ -93,6 +93,18 @@ app.get("/allbooks", async (req, res) => {
   }
 });
 
+app.get("/book/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const book = await Book.findOne({ _id: id });
+
+    res.status(200).json(book);
+  } catch (error) {
+    console.error("Error fetching books from database:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.post("/message", async (req, res) => {
   try {
     const { firstName, lastName, email, message } = req.body;
@@ -106,6 +118,20 @@ app.post("/message", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+
+app.post("/sendbook",async(req, res) => {
+
+  try {
+
+    console.log(req.body);
+    res.status(201).json({ message: "Book sent successfully" });
+    
+  } catch (error) {
+    console.error("Error sending message:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+})
 
 const PORT = process.env.PORT || 3000;
 

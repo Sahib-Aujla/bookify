@@ -15,10 +15,21 @@ const apiSlice = createApi({
           body: message,
         }),
       }),
+      getBook: builder.query({
+        query: (id) => `/book/${id}`,
+      }),
+      sendBook: builder.mutation({
+        query: (message) => ({
+          url: "/sendbook",
+          method: "POST",
+          body: message,
+        }),
+      }),
     };
   },
 });
 
-export const { useGetAllBooksQuery, useSendMessageMutation } = apiSlice;
+export const { useGetAllBooksQuery, useSendMessageMutation, useGetBookQuery, useSendBookMutation } =
+  apiSlice;
 
 export default apiSlice;

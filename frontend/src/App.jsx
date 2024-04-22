@@ -14,7 +14,7 @@ const App = () => {
       </div>
       <ButtonGradient></ButtonGradient>
       <Hero />
-      <Benefits />
+      <Benefits showAll={false} />
       <Contact />
     </>
   );

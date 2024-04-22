@@ -3,7 +3,9 @@ import Heading from "./Heading";
 import Section from "./Section";
 import { useGetAllBooksQuery } from "../store/apiSlice";
 import BookCard from "./BookCard";
-const Benefits = () => {
+
+
+const Benefits = ({showAll}) => {
 
   const { data: books, isLoading, isError } = useGetAllBooksQuery();
   if(isLoading) {
@@ -11,9 +13,14 @@ const Benefits = () => {
   }else if(isError) {
     console.log("Error loading books");
   }
+  let allBooks=books;
+  if(!showAll) {
+    allBooks=books?.slice(0,6);
+  }
   
   return (
     <Section id="features">
+   
       <div className="container relative z-2">
         <Heading
           className="md:max-w-md lg:max-w-2xl"
@@ -21,7 +28,7 @@ const Benefits = () => {
         />
 
         <div className="flex flex-wrap gap-10 mb-10">
-          {books?.slice(0,6).map((item) => (
+          {allBooks?.map((item) => (
             <BookCard item={item} key={item.id} />
           ))}
         </div>
