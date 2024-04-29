@@ -1,3 +1,9 @@
 backend/.env
 .env
 node_modules
+
+backend/bookUrls
+
+backend/images
+images
+bookUrls

@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
 const books = require("./mock_data");
 const { Book, Message } = require("./model");
+
+const {generateEmailBody,sendEmail}=require("./nodemailer/index.js")
 require("dotenv").config();
 const cors = require("cors");
 
@@ -124,7 +126,9 @@ app.post("/sendbook",async(req, res) => {
 
   try {
 
-    console.log(req.body);
+    const book=await Book.findOne({_id:req.body.id})
+    const emailContent=generateEmailBody(book);
+    await sendEmail(emailContent,req.body.Email,book);
     res.status(201).json({ message: "Book sent successfully" });
     
   } catch (error) {
